@@ -64,11 +64,14 @@ def withdraw(cardHolder): #to withdraw
         withdraw = float(input("Enter How much u want to withdraw : "))
         #to check if user have enough money
         try:
-            if(cardHolder.get_balance() >= withdraw):
-                cardHolder.set_balance(cardHolder.get_balance()-withdraw)
-                print ("your withdraw with : ",withdraw," is successfully and your new balance is : ",cardHolder.get_balance())
+            if(withdraw<=100000):
+                if(cardHolder.get_balance() >= withdraw):
+                    cardHolder.set_balance(cardHolder.get_balance()-withdraw)
+                    print ("your withdraw with : ",withdraw," is successfully and your new balance is : ",cardHolder.get_balance())
+                else:
+                    print("u dont have enough money")   
             else:
-                print("u dont have enough money")    
+                print("no enough mony in atm please try agin later ....")
         except :
             print("Invalid input")        
     except:
@@ -76,66 +79,67 @@ def withdraw(cardHolder): #to withdraw
 
 def check_balance(cardHolder):#to show balance
     print("Your current balance is : ",cardHolder.get_balance())
-####################
-current_user = cardHolder("","","","","")
 
-# list of users
-list_of_cardHolders =[]
-list_of_cardHolders.append(cardHolder("45634674545636546",3465,"omar","khalifa",3456.33))
-list_of_cardHolders.append(cardHolder("45634346453636546",2634,"ahmed","mos3ad",5674.353))
-list_of_cardHolders.append(cardHolder("45784534545636546",8456,"mohamed","jom",563.45))
-list_of_cardHolders.append(cardHolder("45634674545745632",7453,"saad","kajgf",5234.335))
-list_of_cardHolders.append(cardHolder("95675454545636546",7744,"tamed","mosssa",3325.443))
+if __name__ == "__main__":
+    current_user = cardHolder("","","","","")
 
-#check card number
-debitCardNumber =""
-while True:
-    try:
-        debitCardNumber =input("please insert your debit Card Number : ")
-        debitMatch = [holder for holder in list_of_cardHolders if holder.cardNum ==debitCardNumber]
-        if(len(debitMatch)>0):
-            current_user = debitMatch[0]
-            break
+    # list of users
+    list_of_cardHolders =[]
+    list_of_cardHolders.append(cardHolder("45634674545636546",3465,"omar","khalifa",3456.33))
+    list_of_cardHolders.append(cardHolder("45634346453636546",2634,"ahmed","mos3ad",5674.353))
+    list_of_cardHolders.append(cardHolder("45784534545636546",8456,"mohamed","jom",563.45))
+    list_of_cardHolders.append(cardHolder("45634674545745632",7453,"saad","kajgf",5234.335))
+    list_of_cardHolders.append(cardHolder("95675454545636546",7744,"tamed","mosssa",3325.443))
+
+    #check card number
+    debitCardNumber =""
+    while True:
+        try:
+            debitCardNumber =input("please insert your debit Card Number : ")
+            debitMatch = [holder for holder in list_of_cardHolders if holder.cardNum ==debitCardNumber]
+            if(len(debitMatch)>0):
+                current_user = debitMatch[0]
+                break
+            else:
+                print("Card number not recognized 1. Please try again.")  
+        except :
+            print("Card number not recognized 2. Please try again.")
+
+    #check pin number    
+    pinCounter =0
+    while True:
+        
+            userPin = int(input("Please enter your PIN : ").strip())
+            if(current_user.get_pin() == userPin):
+                break
+            else:
+                pinCounter += 1
+                if(pinCounter == 3):
+                    exit_program(1)
+                else:    
+                    print("wrong pin Please try again u have ",3-pinCounter, "trys!")
+
+        
+
+
+    # wlecome page
+    print("Welcom ",current_user.get_firstName(), " : ")
+    option =0
+    while True:
+        print_menu(Self)
+        try:
+            option = int(input())
+        except:
+            print("Invalid input. Please try again")    
+        if(option == 1 ):
+            deposit(current_user)
+        elif(option ==2):
+            withdraw(current_user)   
+        elif(option ==3):
+            check_balance(current_user)
+        elif(option ==4):
+            break      
         else:
-            print("Card number not recognized 1. Please try again.")  
-    except :
-        print("Card number not recognized 2. Please try again.")
-
-#check pin number    
-pinCounter =0
-while True:
-    
-        userPin = int(input("Please enter your PIN : ").strip())
-        if(current_user.get_pin() == userPin):
-            break
-        else:
-            pinCounter += 1
-            if(pinCounter == 3):
-                exit_program(1)
-            else:    
-                print("wrong pin Please try again u have ",3-pinCounter, "trys!")
-
-    
-
-
-# wlecome page
-print("Welcome ",current_user.get_firstName(), " : ")
-option =0
-while True:
-    print_menu(Self)
-    try:
-        option = int(input())
-    except:
-        print("Invalid input. Please try again")    
-    if(option == 1 ):
-        deposit(current_user)
-    elif(option ==2):
-        withdraw(current_user)   
-    elif(option ==3):
-        check_balance(current_user)
-    elif(option ==4):
-        break      
-    else:
-        print("Invalid option. Please try again") 
-        option=0  
-print("Thank you.......")
+            print("Invalid option. Please try again") 
+            option=0  
+    print("Thank you.......")
